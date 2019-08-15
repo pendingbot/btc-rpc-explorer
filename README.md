@@ -21,7 +21,7 @@ Live demo are available at: [https://btc-explorer.com](https://btc-explorer.com)
 * Optional transaction history for addresses by querying from ElectrumX, blockchain.com, blockchair.com, or blockcypher.com
 * Mempool summary, with fee, size, and age breakdowns
 * RPC command browser and terminal
-* Currently supports BTC, LTC (support for any Bitcoin-RPC-protocol-compliant coin can be added easily)
+* Currently supports BTC, LTC, MONA (support for any Bitcoin-RPC-protocol-compliant coin can be added easily)
 
 # Getting started
 
@@ -56,15 +56,15 @@ See [.env-sample](.env-sample) for a list of the options and details for formatt
 You may also pass options as CLI arguments, for example:
 
 ```bash
-btc-rpc-explorer --port 8080 --bitcoind-port 18443 --bitcoind-cookie ~/.bitcoin/regtest/.cookie
+mona-rpc-explorer --port 8080 --bitcoind-port 18443 --bitcoind-cookie ~/.bitcoin/regtest/.cookie
 ```
 
-See `btc-rpc-explorer --help` for the full list of CLI options.
+See `mona-rpc-explorer --help` for the full list of CLI options.
 
 ## Run via Docker
 
-1. `docker build -t btc-rpc-explorer .`
-2. `docker run -p 3002:3002 -it btc-rpc-explorer`
+1. `docker build -t mona-rpc-explorer .`
+2. `docker run -p 3002:3002 -it mona-rpc-explorer`
 
 # Support
 

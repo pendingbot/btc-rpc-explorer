@@ -1,0 +1,74 @@
+{
+  "coinbase_tags": {
+    "/EasyMine.online/": {
+      "name": "EASY MINE",
+      "link": "https://easymine.online/"
+    },
+    "/mph/": {
+      "name": "MINING POOL HUB",
+      "link": "https://miningpoolhub.com/"
+    },
+    "zpool.ca": {
+      "name": "zpool",
+      "link": "https://www.zpool.ca/"
+    },
+    "/VIP Pool - ": {
+      "name": "VIP Pool",
+      "link": "https://vippool.net/"
+    },
+    "NLPOOL.NL": {
+      "name": "NLPOOL",
+      "link": "https://www.nlpool.nl/"
+    },
+    "ahashpool": {
+      "name": "A Hash Pool",
+      "link": "https://www.ahashpool.com/"
+    },
+    "mining.zinntikumugai.xyz": {
+      "name": "人のプール",
+      "link": "https://mining.zinntikumugai.xyz/"
+    },
+    "EMCD": {
+      "name": "EMCD",
+      "link": "https://emcd.io/"
+    },
+    "bsod.solo.1": {
+      "name": "BSOD.PW",
+      "link": "https://bsod.pw/"
+    },
+    "Waterpark": {
+      "name": "Waterpark",
+      "link": "https://www.waterparkmining.com/"
+    },
+    "/mccl.pw/": {
+      "name": "MCCL.pw",
+      "link": "https://mccl.pw/"
+    },
+    "/MiningCore/": {
+      "name": "COINFOUNDRY.ORG",
+      "link": "https://coinfoundry.org/"
+    },
+    "/mining-dutch/": {
+      "name": "Mining-Dutch",
+      "link": "https://www.mining-dutch.nl/"
+    },
+    "/prohashing.com": {
+      "name": "Prohashing",
+      "link": "https://prohashing.com/"
+    },
+    "/goisgod/": {
+      "name": "Go is God",
+      "link": "https://go-is-god.electrum-mona.org/"
+    },
+    "/MiningBeaver/": {
+      "name": "MiningBeaver",
+      "link": "https://miningbeaver.ga/"
+    }
+  },
+  "payout_addresses": {
+    "M8jL8FmxcdQKiXgRQV7adBneWTfXdpA8Hx": {
+      "name": "F2pool",
+      "link": "M8jL8FmxcdQKiXgRQV7adBneWTfXdpA8Hx"
+    },
+  }
+}

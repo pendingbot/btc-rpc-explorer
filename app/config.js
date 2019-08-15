@@ -5,7 +5,7 @@ var url = require('url');
 var coins = require("./coins.js");
 var credentials = require("./credentials.js");
 
-var currentCoin = process.env.BTCEXP_COIN || "BTC";
+var currentCoin = process.env.BTCEXP_COIN || "MONA";
 
 var rpcCred = credentials.rpc;
 
@@ -143,10 +143,11 @@ module.exports = {
 				{
 					title:"Related Sites",
 					links:[
-						{name: "Bitcoin Explorer", url:"https://btc.chaintools.io", imgUrl:"/img/logo/btc.svg"},
-						{name: "LND Admin", url:"https://lnd-admin.chaintools.io", imgUrl:"/img/logo/lnd-admin.png"},
+						{name: "Monacoin Explorer", url:"https://chaintools.mona-coin.de", imgUrl:"/img/logo/mona.svg"},
+						//{name: "Bitcoin Explorer", url:"https://btc.chaintools.io", imgUrl:"/img/logo/btc.svg"},
+						//{name: "LND Admin", url:"https://lnd-admin.chaintools.io", imgUrl:"/img/logo/lnd-admin.png"},
 						//{name: "Litecoin Explorer", url:"https://ltc.chaintools.io", imgUrl:"/img/logo/ltc.svg"},
-						//{name: "Lightning Explorer", url:"https://lightning.chaintools.io", imgUrl:"/img/logo/lightning.svg"},
+						{name: "Lightning Explorer", url:"http://explorer.monacoin.ninja:10080", imgUrl:"/img/logo/lightning.svg"},
 					]
 				}
 			]
