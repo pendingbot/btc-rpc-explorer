@@ -67,6 +67,10 @@
     "zergpool.com": {
       "name": "zergpool",
       "link": "http://zergpool.com/"
+    },
+    "/MiningCore/": {
+      "name": "COINFOUNDRY",
+      "link": "https://coinfoundry.org/"
     }
   },
   "payout_addresses": {
@@ -77,6 +81,26 @@
     "PEzjpzZPoBvsKeqzpt1EhcdgJgbtYZa9rD": {
       "name": "MiningBeaver",
       "link": "https://miningbeaver.ga/"
+    },
+    "MR5wfwXv3z1XEZHNwQxddJ9p6KEp2wQis5": {
+      "name": "温水プール",
+      "link": "https://onsui-monacoin.xyz/"
+    },
+    "MBqPGPPuKVCLQSyGjNaSgQtAActjz37xFs": {
+      "name": "suprnova.cc",
+      "link": "https://mona.suprnova.cc/"
+    },
+    "MTPjdtVhrsREnJfwuiMXGQMNqNfhEJvqvX": {
+      "name": "AAPool",
+      "link": "https://aapool.org/"
+    },
+    "MXBJK45Nsp7Cm9va3vyoypTrr8W6MUGzPz": {
+      "name": "lapool.me",
+      "link": "https://lapool.me/"
+    },
+    "M9FqSew69fo6td3M14H6FuSz5xEMG1Q7we": {
+      "name": "MACYAN.net",
+      "link": "https://macyan.net/"
     }
   }
 }
