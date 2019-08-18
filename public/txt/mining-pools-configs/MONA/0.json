@@ -79,6 +79,10 @@
     "/CybtcPool/": {
       "name": "CybtcPool",
       "link": "https://chaintools.mona-coin.de/"
+    },
+    "/p2p-spb.xyz:5213/": {
+      "name": "p2pool",
+      "link": "http://p2p-spb.xyz:2942/"
     }
   },
   "payout_addresses": {
