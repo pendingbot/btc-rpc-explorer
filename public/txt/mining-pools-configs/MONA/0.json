@@ -71,6 +71,14 @@
     "/MiningCore/": {
       "name": "COINFOUNDRY",
       "link": "https://coinfoundry.org/"
+    },
+    "/mmpool/": {
+      "name": "mmpool",
+      "link": "https://chaintools.mona-coin.de/"
+    },
+    "/CybtcPool/": {
+      "name": "CybtcPool",
+      "link": "https://chaintools.mona-coin.de/"
     }
   },
   "payout_addresses": {
@@ -110,12 +118,12 @@
       "name": "mininghub",
       "link": "https://chaintools.mona-coin.de/"
     },
-    "PFYNHUf7ySX4jC7YijSERJbYFGCqELwbv4": {
-      "name": "mmpool",
-      "link": "https://chaintools.mona-coin.de/"
-    },
     "ME29gvWZcNWaD6JeUEfNXDTicTzMJ4cNMY": {
       "name": "mutartSedon",
+      "link": "https://chaintools.mona-coin.de/"
+    },
+    "PTTyyywnFp4ZU4s6fv9Gj5YvHKCyF83cUr": {
+      "name": "PTTyyy",
       "link": "https://chaintools.mona-coin.de/"
     }
   }
