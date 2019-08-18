@@ -17,7 +17,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/janoside/btc-rpc-explorer.git"
+    "url": "git+https://github.com/pendingbot/btc-rpc-explorer.git"
   },
   "dependencies": {
     "async": "2.6.2",
