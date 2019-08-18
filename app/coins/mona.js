@@ -53,7 +53,7 @@ module.exports = {
 		"https://raw.githubusercontent.com/pendingbot/monacoin-pool-list/master/pools.json",
 	],
 	maxBlockWeight: 4000000,
-	targetBlockTimeSeconds: 150,
+	targetBlockTimeSeconds: 90,
 	currencyUnits:currencyUnits,
 	currencyUnitsByName:{"MONA":currencyUnits[0], "mMona":currencyUnits[1], "bits":currencyUnits[2], "satoshi":currencyUnits[3]},
 	baseCurrencyUnit:currencyUnits[3],
@@ -113,6 +113,14 @@ module.exports = {
 			blockHash: "5673823195ab7bf3319edaddaff782662e3fc75761de98b347605fea9350f821",
 			summary: "HardFork(Lyra2rev2 and DGWv3)",
 			referenceUrl: "https://blockbook.electrum-mona.org/block/5673823195ab7bf3319edaddaff782662e3fc75761de98b347605fea9350f821"
+		},
+		{
+			type: "tx",
+			date: "2018-01-19",
+			txid: "ca62e63121842332e9a29ea43cf6be30dd3e1dd4d7a9f0cee0d3ea556e42027e",
+			summary: "The monacoin's atomicswap transaction.",
+			alertBodyHtml: "This is the first monacoin's atomicswap transaction?",
+			referenceUrl: "https://twitter.com/WakiyamaP/status/954345184103342081"
 		}
 	],
 	exchangeRateData:{
