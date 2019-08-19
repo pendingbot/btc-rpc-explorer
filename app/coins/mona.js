@@ -108,6 +108,22 @@ module.exports = {
 		},
 		{
 			type: "blockheight",
+			date: "2014-03-18",
+			blockHeight: 80000,
+			blockHash: "c99b83da7328b58251d16f4646da222b0280f180bd208efa5e3256c9eb6ea2be",
+			summary: "HardFork(KGW)",
+			referenceUrl: "https://chaintools.mona-coin.de/block/c99b83da7328b58251d16f4646da222b0280f180bd208efa5e3256c9eb6ea2be"
+		},
+		{
+			type: "blockheight",
+			date: "2014-05-19",
+			blockHeight: 140000,
+			blockHash: "d362c1bd7aeae0a892000a7d82e0570de633a396c5cc1a3b2ef3b99dcab5be9f",
+			summary: "HardFork(Digishield)",
+			referenceUrl: "https://chaintools.mona-coin.de/block/d362c1bd7aeae0a892000a7d82e0570de633a396c5cc1a3b2ef3b99dcab5be9f"
+		},
+		{
+			type: "blockheight",
 			date: "2015-09-27",
 			blockHeight: 450000,
 			blockHash: "5673823195ab7bf3319edaddaff782662e3fc75761de98b347605fea9350f821",
