@@ -112,7 +112,39 @@ module.exports = {
 			blockHeight: 450000,
 			blockHash: "5673823195ab7bf3319edaddaff782662e3fc75761de98b347605fea9350f821",
 			summary: "HardFork(Lyra2rev2 and DGWv3)",
-			referenceUrl: "https://blockbook.electrum-mona.org/block/5673823195ab7bf3319edaddaff782662e3fc75761de98b347605fea9350f821"
+			referenceUrl: "https://chaintools.mona-coin.de/block/5673823195ab7bf3319edaddaff782662e3fc75761de98b347605fea9350f821"
+		},
+		{
+			type: "blockheight",
+			date: "2017-03-14",
+			blockHeight: 937440,
+			blockHash: "7b29137343ada47206f33e84c9acb2b33d818ef9800658b57c7766a06ce5a696",
+			summary: "Segwit signaring start",
+			referenceUrl: "https://askmona.org/4847?n=1000#res_63"
+		},
+		{
+			type: "blockheight",
+			date: "2017-04-16",
+			blockHeight: 967022,
+			blockHash: "56c4d13e0f304a5aa72bf7ebd3b26a0d35810391f56769a096cbd87fabdae139",
+			summary: "Segwit signaring 75% over",
+			referenceUrl: "https://askmona.org/4847?n=1000#res_258"
+		},
+		{
+			type: "blockheight",
+			date: "2017-04-17",
+			blockHeight: 968596,
+			blockHash: "191f83431b2e7755a1f1309ce4cf1bb71711b88b4edfca4843cb285931e2b6ba",
+			summary: "Segwit locked-in",
+			referenceUrl: "https://askmona.org/4847?n=1000#res_342"
+		},
+		{
+			type: "blockheight",
+			date: "2017-04-27",
+			blockHeight: 977759,
+			blockHash: "ecc773c827a8cde039f6dfcdee2de981b747f58aa1bc4dddcb28e3c857dbc860",
+			summary: "Segwit activated",
+			referenceUrl: "https://askmona.org/4847?n=1000#res_430"
 		},
 		{
 			type: "tx",
