@@ -169,6 +169,13 @@ module.exports = {
 			summary: "The monacoin's atomicswap transaction.",
 			alertBodyHtml: "This is the first monacoin's atomicswap transaction?",
 			referenceUrl: "https://twitter.com/WakiyamaP/status/954345184103342081"
+		},
+		{
+			type: "blockheight",
+			date: "2019-01-14",
+			txid: "4fbce9a4c1ce671dc1f28c22ed7afd0c660820258c9af909ce37819a5a2d9702",
+			summary: "The first block mined by monad(golang client).",
+			referenceUrl: "https://go-is-god.electrum-mona.org/"
 		}
 	],
 	exchangeRateData:{
