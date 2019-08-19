@@ -36,6 +36,10 @@
       "name": "BSOD.PW",
       "link": "https://bsod.pw/"
     },
+    "bsod.1": {
+      "name": "BSOD.PW",
+      "link": "https://bsod.pw/"
+    },
     "Waterpark": {
       "name": "Waterpark",
       "link": "https://www.waterparkmining.com/"
@@ -78,11 +82,15 @@
     },
     "/CybtcPool/": {
       "name": "CybtcPool",
-      "link": "https://chaintools.mona-coin.de/"
+      "link": "http://cybtc.info/"
     },
     "/p2p-spb.xyz:5213/": {
-      "name": "p2pool",
+      "name": "p2p-spb.xyz:2942",
       "link": "http://p2p-spb.xyz:2942/"
+    },
+    "hashrefinery": {
+      "name": "Hash Refinery",
+      "link": "https://pool.hashrefinery.com/"
     }
   },
   "payout_addresses": {
@@ -132,6 +140,18 @@
     },
     "MTSsFce3KeZgnqoCV2ZMuK8Sa6zZKHtdbR": {
       "name": "MTSsF",
+      "link": "https://chaintools.mona-coin.de/"
+    },
+    "PFxxJR6ioL1hhAAT5MGg1DEsSXi4SdR9kJ": {
+      "name": "Minerall.io",
+      "link": "https://minerall.io/"
+    },
+    "MKG8Kot655usAgUvaoPDa1uA1qmdxBxzRn": {
+      "name": "pool.friends-master.net",
+      "link": "http://pool.friends-master.net/"
+    },
+    "MWmm5yH6P3VvZ3Q74zFroCqjLSn5n1Y5Rb": {
+      "name": "MWmm5",
       "link": "https://chaintools.mona-coin.de/"
     }
   }
