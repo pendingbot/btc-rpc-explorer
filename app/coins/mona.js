@@ -168,7 +168,7 @@ module.exports = {
 			txid: "ca62e63121842332e9a29ea43cf6be30dd3e1dd4d7a9f0cee0d3ea556e42027e",
 			summary: "The monacoin's atomicswap transaction.",
 			alertBodyHtml: "This is the first monacoin's atomicswap transaction?",
-			referenceUrl: "https://twitter.com/WakiyamaP/status/954345184103342081"
+			referenceUrl: "https://twitter.com/WakiyamaP/status/954345184103342081/"
 		},
 		{
 			type: "blockheight",
@@ -176,7 +176,7 @@ module.exports = {
 			blockHeight: 1550921,
 			blockHash: "4fbce9a4c1ce671dc1f28c22ed7afd0c660820258c9af909ce37819a5a2d9702",
 			summary: "The first block mined by monad(golang client).",
-			referenceUrl: "https://go-is-god.electrum-mona.org/"
+			referenceUrl: "https://twitter.com/WakiyamaP/status/1084729252434432000/"
 		}
 	],
 	exchangeRateData:{
