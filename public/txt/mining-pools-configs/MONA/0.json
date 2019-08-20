@@ -91,6 +91,10 @@
     "hashrefinery": {
       "name": "Hash Refinery",
       "link": "https://pool.hashrefinery.com/"
+    },
+    "mininghub": {
+      "name": "mininghub",
+      "link": "https://chaintools.mona-coin.de/"
     }
   },
   "payout_addresses": {
@@ -124,10 +128,6 @@
     },
     "PP63zSTEMHxGYnYLxf6cUAto21J7KmBtUL": {
       "name": "t3nz",
-      "link": "https://chaintools.mona-coin.de/"
-    },
-    "PCvJT81cZfjbsgWQ2t6uZ9rSRWj4buLcpT": {
-      "name": "mininghub",
       "link": "https://chaintools.mona-coin.de/"
     },
     "ME29gvWZcNWaD6JeUEfNXDTicTzMJ4cNMY": {
