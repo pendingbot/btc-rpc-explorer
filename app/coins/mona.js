@@ -179,6 +179,22 @@ module.exports = {
 			referenceUrl: "https://askmona.org/4955?n=1000#res_46/"
 		},
 		{
+			type: "blockheight",
+			date: "2017-11-19",
+			blockHeight: 1166000,
+			blockHash: "fe31a64dd400203bbad8265d482019f590f1977f50a15f59d4a4a27e137aac85",
+			summary: "Proof of Burn was started for Monaparty.",
+			referenceUrl: "https://www.monaparty.me/burn-event/"
+		},
+		{
+			type: "blockheight",
+			date: "2017-12-04",
+			blockHeight: 1179440,
+			blockHash: "4451ade20372b15d4d24b07222c7754d693b606415a04aa9eea234a12dc7750f",
+			summary: "Proof of Burn was ended for Monaparty.",
+			referenceUrl: "https://www.monaparty.me/burn-event/"
+		},
+		{
 			type: "tx",
 			date: "2018-01-19",
 			txid: "ca62e63121842332e9a29ea43cf6be30dd3e1dd4d7a9f0cee0d3ea556e42027e",
