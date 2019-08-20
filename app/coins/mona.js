@@ -164,6 +164,22 @@ module.exports = {
 		},
 		{
 			type: "tx",
+			date: "2017-04-28",
+			txid: "634d6f8a46982bafd1ec030048c0b6a70f79ce329812e3d76abe41c914bcb2cd",
+			summary: "First Lighting channel on the Monacoin chain",
+			alertBodyHtml: "The monacoin's First lightning open channnel transaction.",
+			referenceUrl: "https://askmona.org/4955?n=1000#res_10/"
+		},
+		{
+			type: "tx",
+			date: "2017-04-28",
+			txid: "240b2e75b45f57831aedd4fbc17ec424283fc2cc33db65fc585b2e8b095d38d2",
+			summary: "The monacoin's First lightning close channnel transaction.",
+			alertBodyHtml: "The monacoin's First lightning close channnel transaction.",
+			referenceUrl: "https://askmona.org/4955?n=1000#res_46/"
+		},
+		{
+			type: "tx",
 			date: "2018-01-19",
 			txid: "ca62e63121842332e9a29ea43cf6be30dd3e1dd4d7a9f0cee0d3ea556e42027e",
 			summary: "The monacoin's atomicswap transaction.",
