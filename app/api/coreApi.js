@@ -9,6 +9,7 @@ var utils = require("../utils.js");
 var config = require("../config.js");
 var coins = require("../coins.js");
 var redisCache = require("../redisCache.js");
+var Decimal = require("decimal.js");
 
 // choose one of the below: RPC to a node, or mock data while testing
 var rpcApi = require("./rpcApi.js");
@@ -323,15 +324,11 @@ function getPeerSummary() {
 
 function getMempoolDetails(start, count) {
 	return new Promise(function(resolve, reject) {
-		tryCacheThenRpcApi(miscCache, "getRawMempool", 1000, rpcApi.getRawMempool).then(function(result) {
+		tryCacheThenRpcApi(miscCache, "getMempoolTxids", 1000, rpcApi.getMempoolTxids).then(function(resultTxids) {
 			var txids = [];
-			var txidIndex = 0;
-			for (var txid in result) {
-				if (txidIndex >= start && (txidIndex < (start + count)))  {
-					txids.push(txid);
-				}
 
-				txidIndex++;
+			for (var i = start; (i < resultTxids.length && i < (start + count)); i++) {
+				txids.push(resultTxids[i]);
 			}
 
 			getRawTransactions(txids).then(function(transactions) {
@@ -369,7 +366,8 @@ function getMempoolDetails(start, count) {
 						}
 					});
 
-					resolve({ txCount:txidIndex, transactions:transactions, txInputsByTransaction:txInputsByTransaction });
+					resolve({ txCount:resultTxids.length, transactions:transactions, txInputsByTransaction:txInputsByTransaction });
+
 				}).catch(function(err) {
 					reject(err);
 				});
@@ -464,8 +462,20 @@ function getMempoolStats() {
 			var sizeBucketLabels = [];
 
 			for (var i = 0; i < ageBucketCount; i++) {
+				var rangeMin = i * maxAge / ageBucketCount;
+				var rangeMax = (i + 1) * maxAge / ageBucketCount;
+
 				ageBucketTxCounts.push(0);
-				ageBucketLabels.push(parseInt(i * maxAge / ageBucketCount) + " - " + parseInt((i + 1) * maxAge / ageBucketCount));
+
+				if (maxAge > 600) {
+					var rangeMinutesMin = new Decimal(rangeMin / 60).toFixed(1);
+					var rangeMinutesMax = new Decimal(rangeMax / 60).toFixed(1);
+
+					ageBucketLabels.push(rangeMinutesMin + " - " + rangeMinutesMax + " min");
+
+				} else {
+					ageBucketLabels.push(parseInt(rangeMin) + " - " + parseInt(rangeMax) + " sec");
+				}
 			}
 
 			for (var i = 0; i < sizeBucketCount; i++) {

@@ -1,6 +1,6 @@
 {
   "name": "btc-rpc-explorer",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "description": "Explorer for Bitcoin and RPC-compatible blockchains",
   "private": false,
   "bin": "bin/cli.js",
@@ -30,7 +30,7 @@
     "csurf": "^1.10.0",
     "debug": "~4.1.1",
     "decimal.js": "10.1.1",
-    "dotenv": "^8.0.0",
+    "dotenv": "^8.1.0",
     "electrum-client": "github:chaintools/node-electrum-client#43a999036f9c5",
     "express": "^4.17.1",
     "express-session": "1.16.1",
