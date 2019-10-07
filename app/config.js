@@ -158,7 +158,7 @@ module.exports = {
 						//{name: "Bitcoin Explorer", url:"https://btc.chaintools.io", imgUrl:"/img/logo/btc.svg"},
 						//{name: "LND Admin", url:"https://lnd-admin.chaintools.io", imgUrl:"/img/logo/lnd-admin.png"},
 						//{name: "Litecoin Explorer", url:"https://ltc.chaintools.io", imgUrl:"/img/logo/ltc.svg"},
-						{name: "Lightning Explorer", url:"http://explorer.monacoin.ninja:10080", imgUrl:"/img/logo/lightning.svg"},
+						{name: "Lightning Explorer", url:"https://explorer.monacoin.ninja/", imgUrl:"/img/logo/lightning.svg"},
 						{name: "Monalinks", url:"https://mona-links.github.io/wiki/", imgUrl:"/img/logo/monalinks.svg"},
 					]
 				}
