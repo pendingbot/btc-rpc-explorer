@@ -139,11 +139,26 @@ function getSourcecodeProjectMetadata() {
 	});
 }
 
+function loadChangelog() {
+	var filename = "CHANGELOG.md";
+
+	fs.readFile(filename, 'utf8', function(err, data) {
+		if (err) {
+			utils.logError("2379gsd7sgd334", err);
+
+		} else {
+			global.changelogMarkdown = data;
+		}
+	});
+}
+
 
 app.onStartup = function() {
 	global.config = config;
 	global.coinConfig = coins[config.coin];
 	global.coinConfigs = coins;
+
+	loadChangelog();
 
 	if (global.sourcecodeVersion == null && fs.existsSync('.git')) {
 		simpleGit(".").log(["-n 1"], function(err, log) {
@@ -181,7 +196,17 @@ app.continueStartup = function() {
 		timeout: rpcCred.timeout
 	};
 
-	global.client = new bitcoinCore(rpcClientProperties);
+	global.rpcClient = new bitcoinCore(rpcClientProperties);
+
+	var rpcClientNoTimeoutProperties = {
+		host: rpcCred.host,
+		port: rpcCred.port,
+		username: rpcCred.username,
+		password: rpcCred.password,
+		timeout: 0
+	};
+
+	global.rpcClientNoTimeout = new bitcoinCore(rpcClientNoTimeoutProperties);
 
 	coreApi.getNetworkInfo().then(function(getnetworkinfo) {
 		debugLog(`Connected via RPC to node. Basic info: version=${getnetworkinfo.version}, subversion=${getnetworkinfo.subversion}, protocolversion=${getnetworkinfo.protocolversion}, services=${getnetworkinfo.localservices}`);

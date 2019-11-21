@@ -23,6 +23,10 @@ Live demo available at: [https://btc-explorer.com](https://btc-explorer.com)
 * RPC command browser and terminal
 * Currently supports BTC, LTC, MONA (support for any Bitcoin-RPC-protocol-compliant coin can be added easily)
 
+# Changelog / Release notes
+
+See [CHANGELOG.md](/CHANGELOG.md).
+
 # Getting started
 
 The below instructions are geared toward BTC, but can be adapted easily to other coins.

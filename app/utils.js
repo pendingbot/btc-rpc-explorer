@@ -367,7 +367,7 @@ function refreshExchangeRates() {
 // Uses ipstack.com API
 function geoLocateIpAddresses(ipAddresses, provider) {
 	return new Promise(function(resolve, reject) {
-		if (config.privacyMode || config.ipStackComApiAccessKey === undefined) {
+		if (config.privacyMode || config.credentials.ipStackComApiAccessKey === undefined) {
 			resolve({});
 
 			return;
