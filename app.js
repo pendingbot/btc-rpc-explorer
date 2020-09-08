@@ -13,12 +13,15 @@ configPaths.filter(fs.existsSync).forEach(path => {
 	dotenv.config({ path });
 });
 
+global.cacheStats = {};
+
 // debug module is already loaded by the time we do dotenv.config
 // so refresh the status of DEBUG env var
 var debug = require("debug");
 debug.enable(process.env.DEBUG || "btcexp:app,btcexp:error");
 
 var debugLog = debug("btcexp:app");
+var debugErrorLog = debug("btcexp:error");
 var debugPerfLog = debug("btcexp:actionPerformace");
 
 var express = require('express');
@@ -44,13 +47,16 @@ var addressApi = require("./app/api/addressApi.js");
 var electrumAddressApi = require("./app/api/electrumAddressApi.js");
 var coreApi = require("./app/api/coreApi.js");
 var auth = require('./app/auth.js');
+var marked = require("marked");
 
 var package_json = require('./package.json');
 global.appVersion = package_json.version;
 
 var crawlerBotUserAgentStrings = [ "Googlebot", "Bingbot", "Slurp", "DuckDuckBot", "Baiduspider", "YandexBot", "Sogou", "Exabot", "facebot", "ia_archiver" ];
 
-var baseActionsRouter = require('./routes/baseActionsRouter');
+var baseActionsRouter = require('./routes/baseRouter.js');
+var apiActionsRouter = require('./routes/apiRouter.js');
+var snippetActionsRouter = require('./routes/snippetRouter.js');
 
 var app = express();
 
@@ -90,6 +96,8 @@ process.on("unhandledRejection", (reason, p) => {
 });
 
 function loadMiningPoolConfigs() {
+	debugLog("Loading mining pools config");
+
 	global.miningPoolsConfigs = [];
 
 	var miningPoolsConfigDir = path.join(__dirname, "public", "txt", "mining-pools-configs", global.coinConfig.ticker);
@@ -108,15 +116,15 @@ function loadMiningPoolConfigs() {
 
 			global.miningPoolsConfigs.push(JSON.parse(contents));
 		});
-	});
 
-	for (var i = 0; i < global.miningPoolsConfigs.length; i++) {
-		for (var x in global.miningPoolsConfigs[i].payout_addresses) {
-			if (global.miningPoolsConfigs[i].payout_addresses.hasOwnProperty(x)) {
-				global.specialAddresses[x] = {type:"minerPayout", minerInfo:global.miningPoolsConfigs[i].payout_addresses[x]};
+		for (var i = 0; i < global.miningPoolsConfigs.length; i++) {
+			for (var x in global.miningPoolsConfigs[i].payout_addresses) {
+				if (global.miningPoolsConfigs[i].payout_addresses.hasOwnProperty(x)) {
+					global.specialAddresses[x] = {type:"minerPayout", minerInfo:global.miningPoolsConfigs[i].payout_addresses[x]};
+				}
 			}
 		}
-	}
+	});
 }
 
 function getSourcecodeProjectMetadata() {
@@ -141,8 +149,8 @@ function getSourcecodeProjectMetadata() {
 
 function loadChangelog() {
 	var filename = "CHANGELOG.md";
-
-	fs.readFile(filename, 'utf8', function(err, data) {
+	
+	fs.readFile(path.join(__dirname, filename), 'utf8', function(err, data) {
 		if (err) {
 			utils.logError("2379gsd7sgd334", err);
 
@@ -152,11 +160,225 @@ function loadChangelog() {
 	});
 }
 
+function loadHistoricalDataForChain(chain) {
+	debugLog(`Loading historical data for chain=${chain}`);
+
+	if (global.coinConfig.historicalData) {
+		global.coinConfig.historicalData.forEach(function(item) {
+			if (item.chain == chain) {
+				if (item.type == "blockheight") {
+					global.specialBlocks[item.blockHash] = item;
+
+				} else if (item.type == "tx") {
+					global.specialTransactions[item.txid] = item;
+
+				} else if (item.type == "address") {
+					global.specialAddresses[item.address] = {type:"fun", addressInfo:item};
+				}
+			}
+		});
+	}
+}
+
+function verifyRpcConnection() {
+	if (!global.activeBlockchain) {
+		debugLog(`Verifying RPC connection...`);
+
+		coreApi.getNetworkInfo().then(function(getnetworkinfo) {
+			coreApi.getBlockchainInfo().then(function(getblockchaininfo) {
+				global.activeBlockchain = getblockchaininfo.chain;
+
+				// we've verified rpc connection, no need to keep trying
+				clearInterval(global.verifyRpcConnectionIntervalId);
+
+				onRpcConnectionVerified(getnetworkinfo, getblockchaininfo);
+
+			}).catch(function(err) {
+				utils.logError("329u0wsdgewg6ed", err);
+			});
+		}).catch(function(err) {
+			utils.logError("32ugegdfsde", err);
+		});
+	}
+}
+
+function onRpcConnectionVerified(getnetworkinfo, getblockchaininfo) {
+	// localservicenames introduced in 0.19
+	var services = getnetworkinfo.localservicesnames ? ("[" + getnetworkinfo.localservicesnames.join(", ") + "]") : getnetworkinfo.localservices;
+
+	global.getnetworkinfo = getnetworkinfo;
+
+	var bitcoinCoreVersionRegex = /^.*\/Satoshi\:(.*)\/.*$/;
+
+	var match = bitcoinCoreVersionRegex.exec(getnetworkinfo.subversion);
+	if (match) {
+		global.btcNodeVersion = match[1];
+
+		var semver4PartRegex = /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/;
+
+		var semver4PartMatch = semver4PartRegex.exec(global.btcNodeVersion);
+		if (semver4PartMatch) {
+			var p0 = semver4PartMatch[1];
+			var p1 = semver4PartMatch[2];
+			var p2 = semver4PartMatch[3];
+			var p3 = semver4PartMatch[4];
+
+			// drop last segment, which usually indicates a bug fix release which is (hopefully) irrelevant for RPC API versioning concerns
+			global.btcNodeSemver = `${p0}.${p1}.${p2}`;
+
+		} else {
+			var semver3PartRegex = /^([0-9]+)\.([0-9]+)\.([0-9]+)$/;
+
+			var semver3PartMatch = semver3PartRegex.exec(global.btcNodeVersion);
+			if (semver3PartMatch) {
+				var p0 = semver3PartMatch[1];
+				var p1 = semver3PartMatch[2];
+				var p2 = semver3PartMatch[3];
+
+				global.btcNodeSemver = `${p0}.${p1}.${p2}`;
+
+			} else {
+				// short-circuit: force all RPC calls to pass their version checks - this will likely lead to errors / instability / unexpected results
+				global.btcNodeSemver = "1000.1000.0"
+			}
+		}
+	} else {
+		// short-circuit: force all RPC calls to pass their version checks - this will likely lead to errors / instability / unexpected results
+		global.btcNodeSemver = "1000.1000.0"
+
+		debugErrorLog(`Unable to parse node version string: ${getnetworkinfo.subversion} - RPC versioning will likely be unreliable. Is your node a version of Bitcoin Core?`);
+	}
+	
+	debugLog(`RPC Connected: version=${getnetworkinfo.version} subversion=${getnetworkinfo.subversion}, parsedVersion(used for RPC versioning)=${global.btcNodeSemver}, protocolversion=${getnetworkinfo.protocolversion}, chain=${getblockchaininfo.chain}, services=${services}`);
+
+	// load historical/fun items for this chain
+	loadHistoricalDataForChain(global.activeBlockchain);
+
+	if (global.activeBlockchain == "main") {
+		if (global.exchangeRates == null) {
+			utils.refreshExchangeRates();
+		}
+
+		// refresh exchange rate periodically
+		setInterval(utils.refreshExchangeRates, 1800000);
+	}
+
+	// UTXO pull
+	refreshUtxoSetSummary();
+	setInterval(refreshUtxoSetSummary, 30 * 60 * 1000);
+
+
+	// 1d / 7d volume
+	refreshNetworkVolumes();
+	setInterval(refreshNetworkVolumes, 30 * 60 * 1000);
+}
+
+function refreshUtxoSetSummary() {
+	if (config.slowDeviceMode) {
+		global.utxoSetSummary = null;
+		global.utxoSetSummaryPending = false;
+
+		debugLog("Skipping performance-intensive task: fetch UTXO set summary. This is skipped due to the flag 'slowDeviceMode' which defaults to 'true' to protect slow nodes. Set this flag to 'false' to enjoy UTXO set summary details.");
+
+		return;
+	}
+
+	// flag that we're working on calculating UTXO details (to differentiate cases where we don't have the details and we're not going to try computing them)
+	global.utxoSetSummaryPending = true;
+
+	coreApi.getUtxoSetSummary().then(function(result) {
+		global.utxoSetSummary = result;
+
+		result.lastUpdated = Date.now();
+
+		debugLog("Refreshed utxo summary: " + JSON.stringify(result));
+	});
+}
+
+function refreshNetworkVolumes() {
+	if (config.slowDeviceMode) {
+		debugLog("Skipping performance-intensive task: fetch last 24 hrs of blockstats to calculate transaction volume. This is skipped due to the flag 'slowDeviceMode' which defaults to 'true' to protect slow nodes. Set this flag to 'false' to enjoy UTXO set summary details.");
+
+		return;
+	}
+
+	var cutoff1d = new Date().getTime() - (60 * 60 * 24 * 1000);
+	var cutoff7d = new Date().getTime() - (60 * 60 * 24 * 7 * 1000);
+
+	coreApi.getBlockchainInfo().then(function(result) {
+		var promises = [];
+
+		var blocksPerDay = 144 + 20; // 20 block padding
+
+		for (var i = 0; i < (blocksPerDay * 1); i++) {
+			if (result.blocks - i >= 0) {
+				promises.push(coreApi.getBlockStatsByHeight(result.blocks - i));
+			}
+		}
+
+		var startBlock = result.blocks;
+
+		var endBlock1d = result.blocks;
+		var endBlock7d = result.blocks;
+
+		var endBlockTime1d = 0;
+		var endBlockTime7d = 0;
+
+		Promise.all(promises).then(function(results) {
+			var volume1d = new Decimal(0);
+			var volume7d = new Decimal(0);
+
+			var blocks1d = 0;
+			var blocks7d = 0;
+
+			if (results && results.length > 0 && results[0] != null) {
+				for (var i = 0; i < results.length; i++) {
+					if (results[i].time * 1000 > cutoff1d) {
+						volume1d = volume1d.plus(new Decimal(results[i].total_out));
+						volume1d = volume1d.plus(new Decimal(results[i].subsidy));
+						volume1d = volume1d.plus(new Decimal(results[i].totalfee));
+						blocks1d++;
+
+						endBlock1d = results[i].height;
+						endBlockTime1d = results[i].time;
+					}
+
+					if (results[i].time * 1000 > cutoff7d) {
+						volume7d = volume7d.plus(new Decimal(results[i].total_out));
+						volume7d = volume7d.plus(new Decimal(results[i].subsidy));
+						volume7d = volume7d.plus(new Decimal(results[i].totalfee));
+						blocks7d++;
+
+						endBlock7d = results[i].height;
+						endBlockTime7d = results[i].time;
+					}
+				}
+
+				volume1d = volume1d.dividedBy(coinConfig.baseCurrencyUnit.multiplier);
+				volume7d = volume7d.dividedBy(coinConfig.baseCurrencyUnit.multiplier);
+
+				global.networkVolume = {d1:{amt:volume1d, blocks:blocks1d, startBlock:startBlock, endBlock:endBlock1d, startTime:results[0].time, endTime:endBlockTime1d}};
+
+				debugLog(`Network volume: ${JSON.stringify(global.networkVolume)}`);
+
+			} else {
+				debugLog("Unable to load network volume, likely due to bitcoind version older than 0.17.0 (the first version to support getblockstats).");
+			}
+		});
+	});
+}
+
 
 app.onStartup = function() {
+	global.appStartTime = new Date().getTime();
+	
 	global.config = config;
 	global.coinConfig = coins[config.coin];
 	global.coinConfigs = coins;
+
+	global.specialTransactions = {};
+	global.specialBlocks = {};
+	global.specialAddresses = {};
 
 	loadChangelog();
 
@@ -208,48 +430,12 @@ app.continueStartup = function() {
 
 	global.rpcClientNoTimeout = new bitcoinCore(rpcClientNoTimeoutProperties);
 
-	coreApi.getNetworkInfo().then(function(getnetworkinfo) {
-		debugLog(`Connected via RPC to node. Basic info: version=${getnetworkinfo.version}, subversion=${getnetworkinfo.subversion}, protocolversion=${getnetworkinfo.protocolversion}, services=${getnetworkinfo.localservices}`);
 
-	}).catch(function(err) {
-		utils.logError("32ugegdfsde", err);
-	});
+	// keep trying to verify rpc connection until we succeed
+	// note: see verifyRpcConnection() for associated clearInterval() after success
+	verifyRpcConnection();
+	global.verifyRpcConnectionIntervalId = setInterval(verifyRpcConnection, 30000);
 
-	if (config.donations.addresses) {
-		var getDonationAddressQrCode = function(coinId) {
-			qrcode.toDataURL(config.donations.addresses[coinId].address, function(err, url) {
-				global.donationAddressQrCodeUrls[coinId] = url;
-			});
-		};
-
-		global.donationAddressQrCodeUrls = {};
-
-		config.donations.addresses.coins.forEach(function(item) {
-			getDonationAddressQrCode(item);
-		});
-	}
-
-	global.specialTransactions = {};
-	global.specialBlocks = {};
-	global.specialAddresses = {};
-
-	if (config.donations.addresses && config.donations.addresses[coinConfig.ticker]) {
-		global.specialAddresses[config.donations.addresses[coinConfig.ticker].address] = {type:"donation"};
-	}
-
-	if (global.coinConfig.historicalData) {
-		global.coinConfig.historicalData.forEach(function(item) {
-			if (item.type == "blockheight") {
-				global.specialBlocks[item.blockHash] = item;
-
-			} else if (item.type == "tx") {
-				global.specialTransactions[item.txid] = item;
-
-			} else if (item.type == "address") {
-				global.specialAddresses[item.address] = {type:"fun", addressInfo:item};
-			}
-		});
-	}
 
 	if (config.addressApi) {
 		var supportedAddressApis = addressApi.getSupportedAddressApis();
@@ -280,12 +466,6 @@ app.continueStartup = function() {
 		setInterval(getSourcecodeProjectMetadata, 3600000);
 	}
 
-	if (global.exchangeRates == null) {
-		utils.refreshExchangeRates();
-	}
-
-	// refresh exchange rate periodically
-	setInterval(utils.refreshExchangeRates, 1800000);
 
 	utils.logMemoryUsage();
 	setInterval(utils.logMemoryUsage, 5000);
@@ -315,8 +495,14 @@ app.use(function(req, res, next) {
 		}
 	}
 
+	// make a bunch of globals available to templates
 	res.locals.config = global.config;
 	res.locals.coinConfig = global.coinConfig;
+	res.locals.activeBlockchain = global.activeBlockchain;
+	res.locals.exchangeRates = global.exchangeRates;
+	res.locals.utxoSetSummary = global.utxoSetSummary;
+	res.locals.utxoSetSummaryPending = global.utxoSetSummaryPending;
+	res.locals.networkVolume = global.networkVolume;
 	
 	res.locals.host = req.session.host;
 	res.locals.port = req.session.port;
@@ -351,6 +537,18 @@ app.use(function(req, res, next) {
 		}
 	}
 
+	// blockPage.showTechSummary
+	if (!req.session.blockPageShowTechSummary) {
+		var cookieValue = req.cookies['user-setting-blockPageShowTechSummary'];
+
+		if (cookieValue) {
+			req.session.blockPageShowTechSummary = cookieValue;
+
+		} else {
+			req.session.blockPageShowTechSummary = "true";
+		}
+	}
+
 	// homepage banner
 	if (!req.session.hideHomepageBanner) {
 		var cookieValue = req.cookies['user-setting-hideHomepageBanner'];
@@ -364,6 +562,7 @@ app.use(function(req, res, next) {
 	}
 
 	res.locals.currencyFormatType = req.session.currencyFormatType;
+	global.currencyFormatType = req.session.currencyFormatType;
 
 
 	if (!["/", "/connect"].includes(req.originalUrl)) {
@@ -404,6 +603,8 @@ app.use(csurf(), (req, res, next) => {
 });
 
 app.use('/', baseActionsRouter);
+app.use('/api/', apiActionsRouter);
+app.use('/snippet/', snippetActionsRouter);
 
 app.use(function(req, res, next) {
 	var time = Date.now() - req.startTime;
@@ -446,6 +647,7 @@ app.use(function(err, req, res, next) {
 app.locals.moment = moment;
 app.locals.Decimal = Decimal;
 app.locals.utils = utils;
+app.locals.marked = marked;
 
 
 
